@@ -14,7 +14,7 @@ struct RepositoryCellViewModel: Identifiable {
     let forks: String
     
     init(repository: Repository) {
-        self.name = "\(repository.owner)/\(repository.name)"
+        self.name = "\(repository.ownerName)/\(repository.name)"
         self.stars = "⭐ \(repository.stars)"
         self.forks = "🍴 \(repository.forks)"
         self.id = repository.id

@@ -11,7 +11,8 @@ struct Repository: Codable, Identifiable, Equatable {
     let id: Int
     let name: String
     let description: String?
-    let owner: String
+    let ownerName: String
+    let ownerImageUrl: String
     let stars: Int
     let watchers: Int
     let forks: Int

@@ -9,6 +9,12 @@ import Foundation
 
 struct RepositoryOwnerDTO: Codable {
     let login: String
+    let avatarUrl: String
+    
+    enum CodingKeys: String, CodingKey {
+        case login
+        case avatarUrl = "avatar_url"
+    }
 }
 
 struct RepositoryDTO: Codable {
@@ -27,7 +33,8 @@ enum RepositoryMapperDTO {
         return Repository(id: dto.id,
                           name: dto.name,
                           description: dto.description,
-                          owner: dto.owner.login,
+                          ownerName: dto.owner.login,
+                          ownerImageUrl: dto.owner.avatarUrl,
                           stars: dto.stargazers_count,
                           watchers: dto.watchers,
                           forks: dto.forks)

@@ -9,9 +9,15 @@ import SwiftUI
 
 @main
 struct TrendingProjectsApp: App {
+    @StateObject var appCoordinator = AppCoordinator()
+    
+    private var repositoriesFlow: RepositoriesFlowCoordinator {
+        appCoordinator.repositoriesListFlow
+    }
+    
     var body: some Scene {
         WindowGroup {
-            RepositoriesListBuilder.build()
+            repositoriesFlow.rootView
         }
     }
 }

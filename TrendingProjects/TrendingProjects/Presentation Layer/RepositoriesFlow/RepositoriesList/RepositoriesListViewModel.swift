@@ -12,6 +12,7 @@ class RepositoriesListViewModel: ObservableObject {
     private let fetchTrendingRepositoriesUseCase: FetchTrendingRepositoriesUseCaseProtocol
     
     @Published var repositories: [Repository] = []
+    @Published var selectedRepository: Repository? = nil
     @Published var isLoading: Bool = false
     @Published var errorMessage: String?
     var totalAmount: Int = 0
@@ -32,6 +33,7 @@ class RepositoriesListViewModel: ObservableObject {
     // MARK: - Methods
     
     func requestInitialSetOfItems() {
+        guard repositories.isEmpty else { return }
         page = 1
         requestItems(page: page)
     }

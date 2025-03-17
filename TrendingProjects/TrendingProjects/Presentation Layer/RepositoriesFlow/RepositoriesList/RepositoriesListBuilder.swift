@@ -13,8 +13,7 @@ final class RepositoriesListBuilder {
         let repository = RepositoriesRepository(client: client)
         let useCase = FetchTrendingRepositoriesUseCase(repository: repository)
         let viewModel = RepositoriesListViewModel(fetchTrendingRepositoriesUseCase: useCase)
-        let router = RepositoriesListRouter()
         
-        return RepositoriesView(viewModel: viewModel, router: router)
+        return RepositoriesView(viewModel: viewModel)
     }
 }

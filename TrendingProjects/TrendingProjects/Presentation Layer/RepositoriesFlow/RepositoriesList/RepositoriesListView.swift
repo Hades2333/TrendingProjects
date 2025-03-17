@@ -10,45 +10,69 @@ import Combine
 
 struct RepositoriesView: View {
     @StateObject var viewModel: RepositoriesListViewModel
-    @StateObject var router: RepositoriesListRouter
+    @EnvironmentObject var coordinator: RepositoriesFlowCoordinator
     
     var body: some View {
-        NavigationView {
-            VStack {
-                if let errorMessage = viewModel.errorMessage {
-                    Text(errorMessage)
-                        .foregroundColor(.red)
-                } else {
-                    List(viewModel.repositories, id: \.id) { repo in
-                        RepositoryRowView(repository: repo)
-                            .onAppear {
-                                viewModel.requestMoreItemsIfNeeded(repository: repo)
-                            }
-                            .onTapGesture {
-                                print("hi")
-                            }
-                    }
-                    .overlay {
-                        if viewModel.isLoading {
-                            SpinnerView()
-                        }
-                    }
-                }
-                
-            }
+        content
             .navigationTitle("Trending Repositories")
             .onAppear {
                 viewModel.requestInitialSetOfItems()
             }
-//            .sheet(item: $router.selectedRepository) { repository in
-//                print(repository)
-//                // calling detailes repository
-////                RepositoryDetailView(repository: repository)
-//            }
+            .onChange(of: viewModel.repositories) { _, newRepos in
+                if viewModel.selectedRepository == nil, let firstRepo = newRepos.first {
+                    DispatchQueue.main.async {
+                        viewModel.selectedRepository = firstRepo
+                    }
+                }
+            }
+    }
+
+    @ViewBuilder
+    private var content: some View {
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            NavigationSplitView {
+                repositoryList
+            } detail: {
+                if let repo = viewModel.selectedRepository {
+                    RepositoryDetailsBuilder.build(repository: repo)
+                } else {
+                    VStack {
+                        Text("Select a repository")
+                            .foregroundColor(.black)
+                            .font(.largeTitle)
+                    }
+                }
+            }
+        } else {
+            repositoryList
         }
     }
-}
 
-#Preview {
-    RepositoriesListBuilder.build()
+    private var repositoryList: some View {
+        VStack {
+            if let errorMessage = viewModel.errorMessage {
+                Text(errorMessage)
+                    .foregroundColor(.red)
+            } else {
+                List(viewModel.repositories, id: \.id) { repo in
+                    RepositoryRowView(repository: repo)
+                        .onTapGesture {
+                            if UIDevice.current.userInterfaceIdiom == .pad {
+                                viewModel.selectedRepository = repo
+                            } else {
+                                coordinator.pushRepositoryDetails(repository: repo)
+                            }
+                        }
+                        .onAppear {
+                            viewModel.requestMoreItemsIfNeeded(repository: repo)
+                        }
+                }
+                .overlay {
+                    if viewModel.isLoading {
+                        SpinnerView()
+                    }
+                }
+            }
+        }
+    }
 }

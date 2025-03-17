@@ -11,6 +11,7 @@ import Combine
 struct RepositoriesView: View {
     @StateObject var viewModel: RepositoriesListViewModel
     @EnvironmentObject var coordinator: RepositoriesFlowCoordinator
+    @EnvironmentObject var themeManager: ThemeManager
     
     var body: some View {
         content
@@ -25,6 +26,15 @@ struct RepositoriesView: View {
                     }
                 }
             }
+        Button(action: {
+            themeManager.toggleTheme()
+        }) {
+            Text("Toggle Theme")
+                .padding()
+                .background(Color.blue)
+                .foregroundColor(.white)
+                .cornerRadius(10)
+        }
     }
 
     @ViewBuilder
@@ -56,6 +66,7 @@ struct RepositoriesView: View {
             } else {
                 List(viewModel.repositories, id: \.id) { repo in
                     RepositoryRowView(repository: repo)
+                        .environmentObject(themeManager)
                         .onTapGesture {
                             if UIDevice.current.userInterfaceIdiom == .pad {
                                 viewModel.selectedRepository = repo

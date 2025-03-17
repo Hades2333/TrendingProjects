@@ -16,4 +16,15 @@ struct Repository: Codable, Identifiable, Equatable {
     let stars: Int
     let watchers: Int
     let forks: Int
+    
+    init(id: Int, name: String, description: String?, ownerName: String, ownerImageUrl: String, stars: Int, watchers: Int, forks: Int) {
+        self.id = id
+        self.name = name
+        self.description = description
+        self.ownerName = ownerName
+        self.ownerImageUrl = ownerImageUrl
+        self.stars = stars
+        self.watchers = watchers
+        self.forks = forks
+    }
 }

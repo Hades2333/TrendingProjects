@@ -9,6 +9,7 @@ import SwiftUI
 
 struct RepositoryRowView: View {
     let viewModel: RepositoryCellViewModel
+    @EnvironmentObject var themeManager: ThemeManager
     
     init(repository: Repository) {
         self.viewModel = RepositoryCellViewModel(repository: repository)
@@ -19,16 +20,18 @@ struct RepositoryRowView: View {
             VStack(alignment: .leading) {
                 Text(viewModel.name)
                     .font(.headline)
+                    .foregroundColor(themeManager.textColor())
+                
                 HStack {
                     Text(viewModel.stars)
                     Text(viewModel.forks)
                 }
                 .font(.subheadline)
-                .foregroundColor(.gray)
+                .foregroundColor(themeManager.textColor().opacity(0.7))
             }
             Spacer()
         }
         .padding()
-        .background(RoundedRectangle(cornerRadius: 10).fill(Color.white).shadow(radius: 3))
+        .background(RoundedRectangle(cornerRadius: 10).fill(themeManager.backgroundColor()).shadow(radius: 3))
     }
 }

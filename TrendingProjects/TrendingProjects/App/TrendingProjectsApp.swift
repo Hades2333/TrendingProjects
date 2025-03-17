@@ -10,6 +10,7 @@ import SwiftUI
 @main
 struct TrendingProjectsApp: App {
     @StateObject var appCoordinator = AppCoordinator()
+    @StateObject private var themeManager = ThemeManager()
     
     private var repositoriesFlow: RepositoriesFlowCoordinator {
         appCoordinator.repositoriesListFlow
@@ -18,6 +19,8 @@ struct TrendingProjectsApp: App {
     var body: some Scene {
         WindowGroup {
             repositoriesFlow.rootView
+                .environmentObject(themeManager)
+                .preferredColorScheme(themeManager.currentTheme)
         }
     }
 }

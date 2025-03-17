@@ -14,7 +14,7 @@ struct RepositoryOwnerDTO: Codable {
 struct RepositoryDTO: Codable {
     let id: Int
     let name: String
-    let description: String
+    let description: String?
     let owner: RepositoryOwnerDTO
     let stargazers_count: Int
     let watchers: Int
@@ -31,15 +31,5 @@ enum RepositoryMapperDTO {
                           stars: dto.stargazers_count,
                           watchers: dto.watchers,
                           forks: dto.forks)
-    }
-    
-    static func toDTO(obj: Repository) -> RepositoryDTO {
-        return RepositoryDTO(id: obj.id,
-                             name: obj.name,
-                             description: obj.description,
-                             owner: RepositoryOwnerDTO(login: obj.owner),
-                             stargazers_count: obj.stars,
-                             watchers: obj.watchers,
-                             forks: obj.forks)
     }
 }

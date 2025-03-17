@@ -8,5 +8,5 @@
 import Foundation
 
 enum NetworkConstants {
-    static let host = "https://api.github.com/search/"
+    static let host = "api.github.com"
 }

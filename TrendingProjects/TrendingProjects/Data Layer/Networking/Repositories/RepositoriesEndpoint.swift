@@ -8,22 +8,30 @@
 import Foundation
 
 enum RepositoriesEndpoint {
-    case getRepositoriesList
+    case getRepositoriesList(page: Int, perPage: Int)
 }
 
 extension RepositoriesEndpoint: Endpoint {
     var path: String {
         switch self {
         case .getRepositoriesList:
-            return "repositories?q=swift&sort=stars"
+            return "/search/repositories"
         }
     }
-
+    
     var method: HTTPMethod {
         .get
     }
-
+    
     var params: [String: Any]? {
-        return nil
+        switch self {
+        case .getRepositoriesList(let page, let perPage):
+            return [
+                "q": "swift",
+                "sort": "stars",
+                "page": "\(page)",
+                "per_page": "\(perPage)"
+            ]
+        }
     }
 }

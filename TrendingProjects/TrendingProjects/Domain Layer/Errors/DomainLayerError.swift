@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum DomainLayerError: Error {
+enum DomainLayerError: Error, LocalizedError {
     case noData
     case parseError
     case generalError
@@ -18,6 +18,17 @@ enum DomainLayerError: Error {
             self = .parseError
         default:
             self = .generalError
+        }
+    }
+    
+    var errorDescription: String? {
+        switch self {
+        case .noData:
+            return NSLocalizedString("No data available.", comment: "No Data Error")
+        case .parseError:
+            return NSLocalizedString("Failed to parse data.", comment: "Parse Error")
+        case .generalError:
+            return NSLocalizedString("An unknown error occurred.", comment: "General Error")
         }
     }
 }

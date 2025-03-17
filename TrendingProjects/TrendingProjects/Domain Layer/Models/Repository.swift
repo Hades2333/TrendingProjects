@@ -7,14 +7,12 @@
 
 import Foundation
 
-struct Repository: Codable {
+struct Repository: Codable, Identifiable, Equatable {
     let id: Int
     let name: String
-    let description: String
+    let description: String?
     let owner: String
     let stars: Int
     let watchers: Int
     let forks: Int
 }
-
-extension Repository: Equatable {}

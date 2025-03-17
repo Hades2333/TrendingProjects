@@ -11,7 +11,6 @@ protocol HTTPDataDownloader {
     func httpData(for request: URLRequest) async throws -> Data
 }
 
-
 extension URLSession: HTTPDataDownloader {
     func httpData(for request: URLRequest) async throws -> Data {
         do {

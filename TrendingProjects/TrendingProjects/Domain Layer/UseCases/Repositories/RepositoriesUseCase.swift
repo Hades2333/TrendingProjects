@@ -7,8 +7,12 @@
 
 import Foundation
 
+private enum FetchTrendingRepositoriesUseCaseConstants {
+    static let itemsPerPageLoad: Int = 60
+}
+
 protocol FetchTrendingRepositoriesUseCaseProtocol {
-    func execute() async throws -> [Repository]
+    func execute(page: Int) async throws -> Repositories
 }
 
 final class FetchTrendingRepositoriesUseCase: FetchTrendingRepositoriesUseCaseProtocol {
@@ -18,9 +22,12 @@ final class FetchTrendingRepositoriesUseCase: FetchTrendingRepositoriesUseCasePr
         self.repository = repository
     }
     
-    func execute() async throws -> [Repository] {
+    func execute(page: Int) async throws -> Repositories {
         do {
-            return try await repository.getRepositories()
+            return try await repository.getRepositories(
+                page: page,
+                perPage: FetchTrendingRepositoriesUseCaseConstants.itemsPerPageLoad
+            )
         } catch let error as NetworkDataLayerError {
             throw DomainLayerError(dataError: error)
         } catch {

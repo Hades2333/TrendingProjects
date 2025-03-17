@@ -8,10 +8,10 @@
 import Foundation
 
 protocol RepositoriesRepositoryProtocol {
-    func getRepositories() async throws -> [Repository]
+    func getRepositories(page: Int, perPage: Int) async throws -> Repositories
 }
 
-class RepositoriesRepository {
+class RepositoriesRepository: RepositoriesRepositoryProtocol {
     private let client: HTTPClient
     private let host: String
     private let decoder: JSONDecoder
@@ -24,23 +24,16 @@ class RepositoriesRepository {
         self.decoder = decoder
     }
     
-    func getRepositories() async throws -> RepositoriesDTO {
+    func getRepositories(page: Int, perPage: Int) async throws -> Repositories {
         do {
-            let data = try await client.data(from: RepositoriesEndpoint.getRepositoriesList, with: host)
-            return try decoder.decode(RepositoriesDTO.self, from: data)
-        }
-    }
-    
-    func getRepositories() async throws -> [Repository] {
-        do {
-            let data = try await client.data(from: RepositoriesEndpoint.getRepositoriesList, with: host)
-            let dto = try decoder.decode([RepositoryDTO].self, from: data)
+            let data = try await client.data(from: RepositoriesEndpoint.getRepositoriesList(page: page, perPage: perPage), with: host)
+            let dto = try decoder.decode(RepositoriesDTO.self, from: data)
             
-            if dto.isEmpty {
+            if dto.items.isEmpty {
                 throw NetworkDataLayerError.emptyResponse
             }
             
-            return dto.map { RepositoryMapperDTO.toDomain(dto: $0) }
+            return RepositoriesMapperDTO.toDomain(dto: dto)
         } catch let error as DecodingError {
             throw NetworkDataLayerError.decoding(error)
         } catch {

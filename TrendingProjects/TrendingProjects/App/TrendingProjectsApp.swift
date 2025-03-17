@@ -11,7 +11,7 @@ import SwiftUI
 struct TrendingProjectsApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            RepositoriesListBuilder.build()
         }
     }
 }
